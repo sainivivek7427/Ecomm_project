@@ -23,12 +23,18 @@ import java.util.UUID;
 @RequestMapping("/api/products")
 public class ProductController {
 
+
     @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductService productService;
+
+
+    //add Data in db bulk using the CSV file
     @PostMapping("/upload-csv")
     public ResponseEntity<String> uploadCSV(@RequestParam("file") MultipartFile file) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
@@ -80,5 +86,48 @@ public class ProductController {
                     .body("Upload failed: " + e.getMessage());
         }
     }
+
+
+    // Get All Products
+    @GetMapping("/get")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    // Get Product by ID
+    @GetMapping("/get/{pid}")
+    public ResponseEntity<?> getProductById(@PathVariable String pid) {
+        try {
+            Product product = productService.getProductById(pid);
+            return ResponseEntity.ok(product);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // Update Product by ID (only price & discount)
+    @PutMapping("/update/{pid}")
+    public ResponseEntity<?> updateProduct(@PathVariable String pid, @RequestBody Product updatedProduct) {
+        try {
+            Product updated = productService.updateProduct(pid, updatedProduct);
+            System.out.println("Product Updated Successfully");
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // Delete Product by ID
+    @DeleteMapping("/delete/{pid}")
+    public ResponseEntity<String> deleteProduct(@PathVariable String pid) {
+        try {
+            productService.deleteProduct(pid);
+            return ResponseEntity.ok("Product deleted successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
 
 }

@@ -4,14 +4,14 @@ import com.ecom.entity.Category;
 import com.ecom.service.CategoryServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
+
 
     private final CategoryServices categoryServices;
 
@@ -21,8 +21,28 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createCategory(@RequestBody Category category) {
-        String response = categoryServices.createCategory(category);
+    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+        Category response = categoryServices.createCategory(category);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllCategories() {
+        return ResponseEntity.ok(categoryServices.getAllCategories());
+    }
+
+    @GetMapping("/get/{cid}")
+    public ResponseEntity<?> getCategoryById(@PathVariable String cid) {
+        return ResponseEntity.ok(categoryServices.getCategoryById(cid));
+    }
+
+    @PutMapping("/update/{cid}")
+    public ResponseEntity<?> updateCategoryName(@PathVariable String cid, @RequestBody String name) {
+        return ResponseEntity.ok(categoryServices.updateCategory(cid, name));
+    }
+
+    @DeleteMapping("/delete/{cid}")
+    public ResponseEntity<String> deleteCategory(@PathVariable String cid) {
+        return ResponseEntity.ok(categoryServices.deleteCategory(cid));
     }
 }
