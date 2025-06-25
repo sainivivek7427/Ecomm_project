@@ -8,52 +8,61 @@ import java.util.UUID;
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
-
     @Id
     private String id;
 
-    private String userId;
-
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
-    private int quantity;
+    @Column(name = "product_id")
+    private String productId;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "created_date")
     private Long createdDate;
 
     // Getters and Setters
+
+
     public String getId() {
         return id;
     }
-    public void setId(String id) {
-        this.id = id;
+
+    public Cart getCart() {
+        return cart;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getProductId() {
+        return productId;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
-    }
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public Long getCreatedDate() {
         return createdDate;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public void setCreatedDate(Long createdDate) {
         this.createdDate = createdDate;
     }

@@ -1,9 +1,11 @@
 package com.ecom.serviceimpl;
 
+import com.ecom.entity.Cart;
 import com.ecom.entity.CartItem;
 import com.ecom.entity.CartItemRequestDTO;
 import com.ecom.entity.Product;
 import com.ecom.repository.CartItemRepository;
+import com.ecom.repository.CartRepository;
 import com.ecom.repository.ProductRepository;
 import com.ecom.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,36 +15,52 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class CartItemServiceImpl implements CartItemService {
+public class CartItemServiceImpl implements CartItemService
+{
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private CartItemRepository cartItemRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    @Override
+    public void addCartItem(String userId, CartItemRequestDTO request) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + userId));
+
+        CartItem cartItem = new CartItem();
+        cartItem.setId(UUID.randomUUID().toString());
+        cartItem.setCart(cart);
+        cartItem.setProductId(request.getProductId());
+        cartItem.setQuantity(request.getQuantity());
+        cartItem.setCreatedDate(System.currentTimeMillis());
+
+        cartItemRepository.save(cartItem);
+    }
 
     @Override
-    public CartItem addToCart(String userId, CartItemRequestDTO request) {
-        Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        CartItem item = new CartItem();
-        item.setId(UUID.randomUUID().toString());
-        item.setUserId(userId);
-        item.setProduct(product);
-        item.setQuantity(request.getQuantity());
-        item.setCreatedDate(System.currentTimeMillis());
-
+    public CartItem updateCartItem(String cartItemId, int quantity) {
+        CartItem item = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+        item.setQuantity(quantity);
         return cartItemRepository.save(item);
     }
 
     @Override
-    public List<CartItem> getUserCartItems(String userId) {
-        return cartItemRepository.findByUserId(userId);
+    public void removeCartItem(String cartItemId) {
+        if (!cartItemRepository.existsById(cartItemId)) {
+            throw new RuntimeException("CartItem not found");
+        }
+        cartItemRepository.deleteById(cartItemId);
     }
 
     @Override
-    public void removeCartItem(String cartItemId) {
-        cartItemRepository.deleteById(cartItemId);
+    public List<CartItem> getCartItemsByUserId(String userId) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + userId));
+        return cartItemRepository.findByCartId(cart.getId());
     }
+
+
 }

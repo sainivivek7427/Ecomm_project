@@ -6,7 +6,10 @@ import com.ecom.entity.CartItemRequestDTO;
 import java.util.List;
 
 public interface CartItemService {
-    CartItem addToCart(String userId, CartItemRequestDTO request);
-    List<CartItem> getUserCartItems(String userId);
+    void addCartItem(String userId, CartItemRequestDTO request);
+    CartItem updateCartItem(String cartItemId, int quantity);
     void removeCartItem(String cartItemId);
+    List<CartItem> getCartItemsByUserId(String userId);
+
+
 }
