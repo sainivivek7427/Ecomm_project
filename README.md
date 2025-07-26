@@ -119,7 +119,7 @@ Smartphone,20000,10,18000,Latest smartphone,Samsung,100,http://img.com/1,true,El
 
 **Satyam Raikwar and Vivek Saini**  
 Java Backend Developer – Spring Boot & Microservices  
-📧 satyam@example.com | 📱 +91-XXXXXXXXXX
+📧 developer.satyam10@gmail.com | 📱 +91-9244002885
 
 ---
 
