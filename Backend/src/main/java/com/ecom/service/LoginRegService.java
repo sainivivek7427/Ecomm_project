@@ -1,13 +1,11 @@
 package com.ecom.service;
 
 import com.ecom.entity.Customer;
-import org.springframework.stereotype.Service;
 
-
-
-@Service
 public interface LoginRegService {
+    Customer registerCustomer(Customer customer);
 
-    public Customer registerCustomer(Customer customer);
+    Customer getCustomerByEmail(String email);
 
+    Customer saveCustomer(Customer customer);
 }

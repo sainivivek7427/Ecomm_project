@@ -54,6 +54,8 @@ public class Product {
     @Column(name = "updated_date")
     private Long updatedDate;
 
+
+
     // === Getters & Setters ===
 
 

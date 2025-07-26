@@ -1,5 +1,6 @@
 package com.ecom.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -13,6 +14,8 @@ public class Customer {
     private String lastname;
     private String address;
     private Long phoneno;
+
+    @Column(unique = true)
     private String username;
     private String email;
     private String password;
@@ -22,6 +25,38 @@ public class Customer {
     private Long pincode;
     private Long createdDate;
     private Long updateDate;
+
+    //Add Gmail Verify
+    private boolean enabled = false; // New field
+    private String otp;              // To store the OTP temporarily
+    private Long otpGeneratedTime;  // For expiry (epoch time)
+
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public void setOtpGeneratedTime(Long otpGeneratedTime) {
+        this.otpGeneratedTime = otpGeneratedTime;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public Long getOtpGeneratedTime() {
+        return otpGeneratedTime;
+    }
+
+
 
 
     public Customer() {
@@ -120,7 +155,7 @@ public class Customer {
     }
 
     // Suggested code may be subject to a license. Learn more: ~LicenseLog:809410814.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:3428689001.
+    // Suggested code may be subject to a license. Learn more: ~LicenseLog:3428689001.
     public Long getCreatedDate() {
         return createdDate;
     }
@@ -143,8 +178,4 @@ public class Customer {
                 + password + ", role=" + role + ", city=" + city + ", country=" + country + ", pincode=" + pincode
                 + ", createdDate=" + createdDate + ", updateDate=" + updateDate + "]";
     }
-
-
-
-
 }
